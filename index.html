@@ -7,6 +7,8 @@
     <link rel="stylesheet" type='text/css' href="style.css"> 
 </head>
 <body>
+  <div class="container">
+    <div class="left-column">
     <h1></h1>
     <p>
         <p id="display-temp"></p>
@@ -15,7 +17,19 @@
         <button id='temperature-reset'>reset</button>
         <button id='power-saving'>Turn Power Saving Mode off</button>
     </p>
-    <h3 id='city'>London</h3>
+  </div>
+  <div class="right-column">
+    <p class="vertical">degrees</p>
+  </div>
+    
+  </div>
+  
+    <p>Choose city:</p>
+    <form>
+      <input type="text" id="city-name">
+      <input type="submit" value="Submit" id="submit-button">
+    </form>
+    <h3 id='city'>No City selected</h3>
     <p id='weather'></p>
     <p id='outside-temp'></p>
     <script src="src/Thermostat.js"></script>

@@ -1,3 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #power-saving {
   background-color: lightgreen;
+}
+
+.left-column {
+  width: 66%;
+  display: inline-block;
+}
+
+.right-column {
+  width: 33%;
+  height: 100vh;
+  background-color: black;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+}
+
+.vertical {
+  margin: 250px 0 0 -235px;
+  transform: rotate(90deg);
+  font-size: 100px;
+  color: white;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

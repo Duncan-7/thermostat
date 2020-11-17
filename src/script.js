@@ -38,18 +38,24 @@ powerSaving.addEventListener('click', function(){
   console.log(thermostat.powerSavingModeOn) 
 })
 
-function getWeather() {
+const submitButton = document.getElementById('submit-button');
+submitButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  const city = document.getElementById('city-name').value.toLowerCase();
+  getWeather(city);
+})
+
+function getWeather(city) {
   const Http = new XMLHttpRequest();
-  const url = 'http://api.openweathermap.org/data/2.5/weather?q=london&appid=c8d578d915427955af496a6973fe82c5&units=metric'
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=c8d578d915427955af496a6973fe82c5&units=metric`
   Http.open("GET", url);
   Http.send();
   Http.onreadystatechange = (e) => {
     console.log(Http.response)
     data = JSON.parse(Http.response)
     console.log(data.id)
+    updateDisplay('city', city)
     updateDisplay('weather',data.weather[0]['description'])
     updateDisplay('outside-temp',data.main.temp)
-  } 
+  }
 }
-
-getWeather()
