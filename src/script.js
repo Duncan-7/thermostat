@@ -1,27 +1,27 @@
 const thermostat = new Thermostat;
-updateDisplay();
+updateDisplay('display-temp', thermostat.temperature);  
 
-function updateDisplay() {
-  const displayTemp = document.getElementById('display-temp');
-  displayTemp.textContent = thermostat.temperature;
+function updateDisplay(elementId, content) {
+  const elements = document.getElementById(elementId);
+  elements.textContent = content;
 }
 
 const upButton = document.getElementById('temperature-up');
 upButton.addEventListener('click', function() {
   thermostat.up();
-  updateDisplay();  
+  updateDisplay('display-temp', thermostat.temperature);  
 });
 
 const downButton = document.getElementById('temperature-down');
 downButton.addEventListener('click', function() {
   thermostat.down();
-  updateDisplay();  
+  updateDisplay('display-temp', thermostat.temperature);  
 });
 
 const resetButton = document.getElementById('temperature-reset');
 resetButton.addEventListener('click', function() {
   thermostat.reset();
-  updateDisplay();
+  updateDisplay('display-temp', thermostat.temperature); 
 });
 
 const powerSaving = document.getElementById('power-saving');
@@ -37,3 +37,19 @@ powerSaving.addEventListener('click', function(){
   }
   console.log(thermostat.powerSavingModeOn) 
 })
+
+function getWeather() {
+  const Http = new XMLHttpRequest();
+  const url = 'http://api.openweathermap.org/data/2.5/weather?q=london&appid=c8d578d915427955af496a6973fe82c5&units=metric'
+  Http.open("GET", url);
+  Http.send();
+  Http.onreadystatechange = (e) => {
+    console.log(Http.response)
+    data = JSON.parse(Http.response)
+    console.log(data.id)
+    updateDisplay('weather',data.weather[0]['description'])
+    updateDisplay('outside-temp',data.main.temp)
+  } 
+}
+
+getWeather()
