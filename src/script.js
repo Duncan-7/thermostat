@@ -9,19 +9,22 @@ function updateDisplay(elementId, content) {
 const upButton = document.getElementById('temperature-up');
 upButton.addEventListener('click', function() {
   thermostat.up();
-  updateDisplay('display-temp', thermostat.temperature);  
+  updateDisplay('display-temp', thermostat.temperature); 
+  saveSettings()
 });
 
 const downButton = document.getElementById('temperature-down');
 downButton.addEventListener('click', function() {
   thermostat.down();
   updateDisplay('display-temp', thermostat.temperature);  
+  saveSettings()
 });
 
 const resetButton = document.getElementById('temperature-reset');
 resetButton.addEventListener('click', function() {
   thermostat.reset();
   updateDisplay('display-temp', thermostat.temperature); 
+  saveSettings()
 });
 
 const powerSaving = document.getElementById('power-saving');
@@ -35,7 +38,8 @@ powerSaving.addEventListener('click', function(){
     powerSaving.style.backgroundColor = "lightgreen"
     powerSaving.textContent = "Turn Power Saving Mode Off"
   }
-  console.log(thermostat.powerSavingModeOn) 
+  console.log(thermostat.powerSavingModeOn)
+  saveSettings() 
 })
 
 const submitButton = document.getElementById('submit-button');
@@ -43,6 +47,7 @@ submitButton.addEventListener('click', function(e) {
   e.preventDefault();
   const city = document.getElementById('city-name').value.toLowerCase();
   getWeather(city);
+  saveSettings()
 })
 
 function getWeather(city) {
@@ -59,3 +64,40 @@ function getWeather(city) {
     updateDisplay('outside-temp',data.main.temp)
   }
 }
+
+function getSettings() {
+  const Http = new XMLHttpRequest();
+  const url = 'http://localhost:9393/temperature'
+  Http.open("GET", url);
+  Http.send();
+  Http.onreadystatechange = (e) => {
+    console.log(Http.response)
+    data = JSON.parse(Http.response)
+    getWeather(data.city)
+    thermostat.temperature = data.temperature
+    updateDisplay('display-temp',data.temperature)
+    thermostat.powerSavingModeOn = data.power
+    if (data.power) {
+      powerSaving.style.backgroundColor = "lightgreen"
+      powerSaving.textContent = "Turn Power Saving Mode Off"
+    }
+    else {
+      powerSaving.style.backgroundColor = "red"
+      powerSaving.textContent = "Turn Power Saving Mode On"
+    }
+  }
+}
+
+function saveSettings() {
+  const Http = new XMLHttpRequest();
+  const url = 'http://localhost:9393/temperature'
+  const city = document.getElementById('city').textContent
+  console.log(city)
+  const data = {"temperature": thermostat.temperature, "city": city, "power": thermostat.powerSavingModeOn}
+  const json = JSON.stringify(data)
+  Http.open("POST", url);
+  Http.send(json);
+}
+
+getSettings()
+
